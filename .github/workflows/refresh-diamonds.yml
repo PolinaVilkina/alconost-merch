@@ -1,0 +1,41 @@
+name: Refresh diamonds
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch diamonds from MCP
+        env:
+          MCP_KEY: ${{ secrets.MCP_KEY }}
+        run: |
+          SESSION_ID=$(cat /proc/sys/kernel/random/uuid)
+          SERVER_SESSION=$(curl -si -X POST "https://services.app.alconost.com/mcp" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: $MCP_KEY" \
+            -H "Mcp-Session-Id: $SESSION_ID" \
+            -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"gh-action","version":"1.0"}}}' \
+            | grep -i "mcp-session-id:" | tail -1 | awk '{print $2}' | tr -d '')
+
+          curl -s -X POST "https://services.app.alconost.com/mcp" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: $MCP_KEY" \
+            -H "Mcp-Session-Id: $SERVER_SESSION" \
+            -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_diamonds","arguments":{}}}' \
+            | jq -r '.result.content[0].text' > diamonds.json
+
+          echo "Fetched $(jq length diamonds.json) records"
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add diamonds.json
+          git diff --cached --quiet || git commit -m "chore: refresh diamonds data"
+          git push
