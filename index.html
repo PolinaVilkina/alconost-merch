@@ -104,6 +104,19 @@
   }
   .emp-dropdown.open .emp-trigger-chevron { transform: rotate(180deg); }
 
+  .dropdown-search {
+    display: block; width: 100%;
+    padding: 8px 12px; margin-bottom: 4px;
+    background: var(--cream); border: 1px solid var(--cream3);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--dark);
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+  .dropdown-search::placeholder { color: var(--stone-light); }
+  .dropdown-search:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,154,92,0.12); }
+  .emp-option.hidden, .order-emp-option.hidden { display: none; }
+
   .emp-list {
     display: none;
     position: absolute; top: calc(100% + 8px); right: 0;
@@ -521,6 +534,7 @@
           </svg>
         </button>
         <div class="emp-list" id="empList">
+          <input class="dropdown-search" id="empSearch" type="text" placeholder="Search…" autocomplete="off" oninput="filterDropdown('empSearch','emp-option')">
           <div class="emp-option placeholder" onclick="selectEmployee('', this)">— Select employee —</div>
           <div class="emp-option" onclick="selectEmployee('albina', this)">albina</div>
           <div class="emp-option" onclick="selectEmployee('alinab', this)">alinab</div>
@@ -632,6 +646,7 @@
               </svg>
             </button>
             <div class="order-emp-list" id="orderEmpList">
+              <input class="dropdown-search" id="orderEmpSearch" type="text" placeholder="Search…" autocomplete="off" oninput="filterDropdown('orderEmpSearch','order-emp-option')">
               <div class="order-emp-option placeholder" onclick="selectOrderEmployee('', this)">— Select your ID —</div>
               <div class="order-emp-option" onclick="selectOrderEmployee('albina', this)">albina</div>
               <div class="order-emp-option" onclick="selectOrderEmployee('alinab', this)">alinab</div>
@@ -780,8 +795,22 @@ const ITEMS = [
   }
 ];
 
+function filterDropdown(searchId, optionClass) {
+  const q = document.getElementById(searchId).value.toLowerCase();
+  document.querySelectorAll('.' + optionClass + ':not(.placeholder)').forEach(o => {
+    o.classList.toggle('hidden', !o.textContent.toLowerCase().includes(q));
+  });
+}
+
 function toggleEmpDropdown() {
-  document.getElementById('empDropdown').classList.toggle('open');
+  const dd = document.getElementById('empDropdown');
+  dd.classList.toggle('open');
+  if (dd.classList.contains('open')) {
+    const s = document.getElementById('empSearch');
+    s.value = '';
+    filterDropdown('empSearch', 'emp-option');
+    setTimeout(() => s.focus(), 50);
+  }
 }
 
 function selectEmployee(userId, el) {
@@ -793,7 +822,14 @@ function selectEmployee(userId, el) {
 }
 
 function toggleOrderEmpDropdown() {
-  document.getElementById('orderEmpDropdown').classList.toggle('open');
+  const dd = document.getElementById('orderEmpDropdown');
+  dd.classList.toggle('open');
+  if (dd.classList.contains('open')) {
+    const s = document.getElementById('orderEmpSearch');
+    s.value = '';
+    filterDropdown('orderEmpSearch', 'order-emp-option');
+    setTimeout(() => s.focus(), 50);
+  }
 }
 
 function selectOrderEmployee(userId, el) {
