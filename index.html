@@ -131,6 +131,56 @@
 
   .balance-loading { opacity: 0.5; font-style: italic; font-size: 12px; }
 
+  .order-emp-dropdown { position: relative; margin-bottom: 16px; max-width: 420px; }
+
+  .order-emp-trigger {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 13px 18px;
+    background: var(--cream); border: 1px solid var(--cream3);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--stone);
+    cursor: pointer; text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+    outline: none;
+  }
+  .order-emp-trigger:hover { border-color: var(--gold-light); }
+  .order-emp-dropdown.open .order-emp-trigger,
+  .order-emp-trigger:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(184,154,92,0.12);
+  }
+  .order-emp-trigger-label { flex: 1; }
+  .order-emp-trigger.has-value { color: var(--dark); }
+  .order-emp-trigger-chevron {
+    color: var(--stone-light); flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .order-emp-dropdown.open .order-emp-trigger-chevron { transform: rotate(180deg); }
+
+  .order-emp-list {
+    display: none;
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    max-height: 220px; overflow-y: auto;
+    background: var(--warm-white);
+    border: 1px solid var(--cream3);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 8px 32px rgba(30,26,22,0.10), 0 2px 8px rgba(30,26,22,0.06);
+    z-index: 200; padding: 6px;
+  }
+  .order-emp-dropdown.open .order-emp-list { display: block; }
+  .order-emp-list::-webkit-scrollbar { width: 4px; }
+  .order-emp-list::-webkit-scrollbar-track { background: transparent; }
+  .order-emp-list::-webkit-scrollbar-thumb { background: var(--cream3); border-radius: 4px; }
+
+  .order-emp-option {
+    padding: 8px 12px; border-radius: var(--radius-sm);
+    font-size: 14px; color: var(--dark); cursor: pointer;
+    transition: background 0.15s;
+  }
+  .order-emp-option:hover { background: var(--cream2); }
+  .order-emp-option.placeholder { color: var(--stone-light); font-style: italic; }
+  .order-emp-option.selected { color: var(--gold); font-weight: 500; }
+
   .hero {
     max-width: 1100px; margin: 0 auto; padding: 72px 40px 56px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
@@ -573,9 +623,60 @@
         </div>
 
         <div class="order-form">
-          <label class="form-label" for="userId">Your ID or email in the Alconost system</label>
-          <div class="input-wrap">
-            <input type="text" id="userId" placeholder="e.g. user_123 or anna@alconost.com" autocomplete="off">
+          <label class="form-label">Your ID in the Alconost system</label>
+          <div class="order-emp-dropdown" id="orderEmpDropdown">
+            <button class="order-emp-trigger" id="orderEmpTrigger" type="button" onclick="toggleOrderEmpDropdown()">
+              <span class="order-emp-trigger-label" id="orderEmpLabel">Select your ID</span>
+              <svg class="order-emp-trigger-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="order-emp-list" id="orderEmpList">
+              <div class="order-emp-option placeholder" onclick="selectOrderEmployee('', this)">— Select your ID —</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('albina', this)">albina</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('alinab', this)">alinab</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('alsk', this)">alsk</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('am', this)">am</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ana', this)">ana</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('anastasiya', this)">anastasiya</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('anb', this)">anb</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ank', this)">ank</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('dasha', this)">dasha</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('dima', this)">dima</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('div', this)">div</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('dk', this)">dk</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('dv', this)">dv</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('dy', this)">dy</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ek', this)">ek</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('er', this)">er</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('et', this)">et</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('frida', this)">frida</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('grace', this)">grace</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ik', this)">ik</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ilona', this)">ilona</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('irinam', this)">irinam</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('kseniya', this)">kseniya</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ksu', this)">ksu</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('kuzmin', this)">kuzmin</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('margarita', this)">margarita</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('mp', this)">mp</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('nb', this)">nb</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('nick', this)">nick</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('nl', this)">nl</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('nr', this)">nr</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('nt', this)">nt</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('oleg', this)">oleg</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('om', this)">om</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('pk', this)">pk</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('pv', this)">pv</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('sdn', this)">sdn</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('shu', this)">shu</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('ss', this)">ss</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('td', this)">td</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('tonyzal', this)">tonyzal</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('vk', this)">vk</div>
+              <div class="order-emp-option" onclick="selectOrderEmployee('yt', this)">yt</div>
+            </div>
           </div>
           <div class="err-inline" id="errInline"></div>
           <button class="btn-order" id="btnOrder" onclick="placeOrder()">
@@ -684,17 +785,33 @@ function toggleEmpDropdown() {
 }
 
 function selectEmployee(userId, el) {
-  const label = document.getElementById('empLabel');
-  label.textContent = userId || 'Select employee';
+  document.getElementById('empLabel').textContent = userId || 'Select employee';
   document.querySelectorAll('.emp-option').forEach(o => o.classList.remove('selected'));
   if (el && userId) el.classList.add('selected');
   document.getElementById('empDropdown').classList.remove('open');
   onEmployeeChange(userId);
 }
 
+function toggleOrderEmpDropdown() {
+  document.getElementById('orderEmpDropdown').classList.toggle('open');
+}
+
+function selectOrderEmployee(userId, el) {
+  const trigger = document.getElementById('orderEmpTrigger');
+  document.getElementById('orderEmpLabel').textContent = userId || 'Select your ID';
+  trigger.classList.toggle('has-value', !!userId);
+  document.querySelectorAll('.order-emp-option').forEach(o => o.classList.remove('selected'));
+  if (el && userId) el.classList.add('selected');
+  document.getElementById('orderEmpDropdown').classList.remove('open');
+  document.getElementById('errInline').classList.remove('show');
+}
+
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#empDropdown')) {
     document.getElementById('empDropdown').classList.remove('open');
+  }
+  if (!e.target.closest('#orderEmpDropdown')) {
+    document.getElementById('orderEmpDropdown').classList.remove('open');
   }
 });
 
@@ -723,8 +840,8 @@ async function onEmployeeChange(userId) {
     balance = user ? (user.total ?? 0) : 0;
     balNum.textContent = balance;
     balLabel.textContent = 'diamonds';
-    const userInput = document.getElementById('userId');
-    if (userInput) userInput.value = userId;
+    if (userId) selectOrderEmployee(userId,
+      [...document.querySelectorAll('.order-emp-option')].find(o => o.textContent.trim() === userId));
   } catch (e) {
     balNum.textContent = '—';
     balLabel.textContent = 'error';
@@ -842,7 +959,7 @@ function openItem(id) {
   renderSizes(selectedItem);
 
   document.getElementById('btnOrder').disabled = totalQty(selectedItem) === 0;
-  document.getElementById('userId').value = '';
+  selectOrderEmployee('', null);
   document.getElementById('errInline').classList.remove('show');
   document.getElementById('msgSuccess').classList.remove('show');
   document.getElementById('msgError').classList.remove('show');
@@ -851,7 +968,7 @@ function openItem(id) {
 }
 
 function placeOrder() {
-  const uid = document.getElementById('userId').value.trim();
+  const uid = document.getElementById('orderEmpLabel').textContent.trim();
   const err = document.getElementById('errInline');
   const succ = document.getElementById('msgSuccess');
   const errMsg = document.getElementById('msgError');
@@ -864,10 +981,10 @@ function placeOrder() {
     return;
   }
 
-  if (!uid) {
-    err.textContent = 'Please enter your ID or email to continue';
+  if (!uid || uid === 'Select your ID') {
+    err.textContent = 'Please select your ID to continue';
     err.classList.add('show');
-    document.getElementById('userId').focus();
+    document.getElementById('orderEmpTrigger').focus();
     return;
   }
 
