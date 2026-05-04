@@ -953,17 +953,20 @@ function renderSizes(item) {
 
   grid.innerHTML = item.sizes.map(sz =>
     `<button class="size-btn${sz.qty === 0 ? ' unavail' : ''}"
-             ${sz.qty > 0 ? `onclick="pickSize('${sz.label}',${sz.qty})"` : 'disabled'}
+             data-label="${sz.label.replace(/"/g, '&quot;')}" data-qty="${sz.qty}"
+             ${sz.qty > 0 ? 'onclick="pickSize(this)"' : 'disabled'}
              title="${sz.qty === 0 ? 'Out of stock' : sz.qty + ' available'}">
        ${sz.label}
      </button>`
   ).join('');
 }
 
-function pickSize(label, qty) {
+function pickSize(btn) {
+  const label = btn.dataset.label;
+  const qty = parseInt(btn.dataset.qty, 10);
   selectedSize = label;
   document.querySelectorAll('.size-btn').forEach(b =>
-    b.classList.toggle('selected', b.textContent.trim() === label));
+    b.classList.toggle('selected', b === btn));
   document.getElementById('sizeHint').textContent =
     qty <= 3 ? `Only ${qty} left in this size` : `${qty} available in this size`;
   document.getElementById('errInline').classList.remove('show');
