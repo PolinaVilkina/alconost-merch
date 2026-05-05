@@ -1,0 +1,27 @@
+{
+  "laptop_case": [
+    {"label": "17\"", "qty": 3},
+    {"label": "15.6\"", "qty": 18},
+    {"label": "15\"", "qty": 1},
+    {"label": "14\"", "qty": 3}
+  ],
+  "tshirt": [
+    {"label": "Female S", "qty": 3},
+    {"label": "Female XS", "qty": 1},
+    {"label": "Male L", "qty": 2},
+    {"label": "Male XL", "qty": 1},
+    {"label": "Male (one size)", "qty": 2}
+  ],
+  "sweatshirt": [
+    {"label": "Male M", "qty": 3}
+  ],
+  "backpack": [
+    {"label": "City style", "qty": 1}
+  ],
+  "hoodie": [
+    {"label": "Male XL", "qty": 1}
+  ],
+  "luggage_cover": [],
+  "bottle": [],
+  "rain_poncho": []
+}
