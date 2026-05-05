@@ -1054,7 +1054,22 @@ function placeOrder() {
   document.getElementById('btnOrder').disabled = totalQty(selectedItem) === 0;
 }
 
-renderGrid();
+async function loadStock() {
+  try {
+    const resp = await fetch('stock.json?t=' + Date.now());
+    const stock = await resp.json();
+    ITEMS.forEach(item => {
+      if (stock[item.id] !== undefined) {
+        item.sizes = stock[item.id];
+      }
+    });
+  } catch (e) {
+    console.warn('Could not load stock.json, using built-in data', e);
+  }
+  renderGrid();
+}
+
+loadStock();
 </script>
 </body>
 </html>
