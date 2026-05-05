@@ -726,7 +726,11 @@ const ART = {
 
   luggage_cover: `<svg viewBox="0 0 90 90" class="item-art" fill="none"><rect x="18" y="14" width="54" height="68" rx="8" fill="#E0D8C8" stroke="#C8C0B0" stroke-width="0.8"/><rect x="22" y="18" width="46" height="60" rx="6" fill="#EDE8DE"/><circle cx="45" cy="48" r="14" fill="#E8E3D8" stroke="#D4CEBE" stroke-width="0.5"/><circle cx="41" cy="46" r="3.8" fill="#1E1A16"/><circle cx="49" cy="46" r="3.8" fill="#1E1A16"/><circle cx="42" cy="45" r="1.2" fill="white"/><circle cx="50" cy="45" r="1.2" fill="white"/><polygon points="45,50 43,53 47,53" fill="#B89A5C"/><rect x="40" y="10" width="10" height="6" rx="2" fill="#C8C0B0" stroke="#B0A898" stroke-width="0.5"/></svg>`,
 
-  rain_poncho: `<svg viewBox="0 0 90 90" class="item-art" fill="none"><ellipse cx="45" cy="28" rx="20" ry="10" fill="#D4E8F4" stroke="#B0CDE0" stroke-width="0.8"/><path d="M25 28 L10 65 L35 65 L40 45 L45 65 L50 45 L55 65 L80 65 L65 28Z" fill="#D4E8F4" stroke="#B0CDE0" stroke-width="0.8"/><circle cx="45" cy="28" r="6" fill="#B0CDE0"/><line x1="25" y1="40" x2="20" y2="65" stroke="#B0CDE0" stroke-width="1" opacity="0.5"/><line x1="65" y1="40" x2="70" y2="65" stroke="#B0CDE0" stroke-width="1" opacity="0.5"/><text x="30" y="58" font-size="5" fill="#7A9CB0" font-family="Georgia,serif" letter-spacing="1">alconost</text></svg>`
+  rain_poncho: `<svg viewBox="0 0 90 90" class="item-art" fill="none"><ellipse cx="45" cy="28" rx="20" ry="10" fill="#D4E8F4" stroke="#B0CDE0" stroke-width="0.8"/><path d="M25 28 L10 65 L35 65 L40 45 L45 65 L50 45 L55 65 L80 65 L65 28Z" fill="#D4E8F4" stroke="#B0CDE0" stroke-width="0.8"/><circle cx="45" cy="28" r="6" fill="#B0CDE0"/><line x1="25" y1="40" x2="20" y2="65" stroke="#B0CDE0" stroke-width="1" opacity="0.5"/><line x1="65" y1="40" x2="70" y2="65" stroke="#B0CDE0" stroke-width="1" opacity="0.5"/><text x="30" y="58" font-size="5" fill="#7A9CB0" font-family="Georgia,serif" letter-spacing="1">alconost</text></svg>`,
+
+  tshirt_black: `<svg viewBox="0 0 90 90" class="item-art" fill="none"><path d="M28 26 L10 42 L20 47 L20 82 L70 82 L70 47 L80 42 L62 26 Q54 20 45 20 Q36 20 28 26Z" fill="#2E2A25" stroke="#1A1610" stroke-width="0.8"/><path d="M35 20 Q45 15 55 20 L55 30 Q45 28 35 30Z" fill="#1E1A16"/><text x="27" y="57" font-size="5.5" fill="#C4A96E" font-family="Georgia,serif" letter-spacing="1.5">alconost</text></svg>`,
+
+  socks: `<svg viewBox="0 0 90 90" class="item-art" fill="none"><path d="M37 14 L37 52 Q37 62 43 67 Q51 75 61 68 Q69 61 64 53 L56 49 L56 14 Z" fill="#F4F0E8" stroke="#D0C8B8" stroke-width="0.8"/><line x1="37" y1="21" x2="56" y2="21" stroke="#C8C0B0" stroke-width="0.8" opacity="0.8"/><line x1="37" y1="25" x2="56" y2="25" stroke="#C8C0B0" stroke-width="0.8" opacity="0.8"/><line x1="37" y1="29" x2="56" y2="29" stroke="#C8C0B0" stroke-width="0.8" opacity="0.8"/><text x="36" y="44" font-size="5" fill="#9A9187" font-family="Georgia,serif" letter-spacing="1">alconost</text></svg>`
 };
 
 // Data from screenshot
@@ -743,9 +747,9 @@ const PHOTOS = {
 const ITEMS = [
   {
     id: 'laptop_case', name: 'Laptop Case', price: 30,
-    short: 'Padded sleeve with owl embroidery',
+    short: 'Soft padded laptop case. Reliable protection for your main work tool.',
     bg: '#F0EBE2',
-    desc: 'Soft padded laptop sleeve with Alconost owl embroidery. Multiple sizes available to fit your machine.',
+    desc: 'Soft padded laptop case. Reliable protection for your main work tool. Multiple sizes available to fit your machine.',
     tags: ['Padded', 'Embroidered'],
     sizes: [
       { label: '17"', qty: 3 },
@@ -755,11 +759,11 @@ const ITEMS = [
     ]
   },
   {
-    id: 'tshirt', name: 'T-shirt', price: 20,
-    short: 'Owl tee with chest embroidery',
+    id: 'tshirt', name: 'T-shirt with Owl', price: 20,
+    short: 'A fashion-forward tee with our owl embroidered in beautiful detail.',
     bg: '#F0EBE1',
-    desc: 'Premium cotton t-shirt in natural beige. Detailed owl embroidery on the chest — our signature mascot.',
-    tags: ['Cotton', 'Embroidered'],
+    desc: 'A fashion-forward tee, one size. Features a double-layer hem effect and our owl embroidered in beautiful detail. Made from dense, quality cotton.',
+    tags: ['Dense cotton', 'Embroidered', 'Unisex'],
     sizes: [
       { label: 'Female S', qty: 3 },
       { label: 'Female XS', qty: 1 },
@@ -769,10 +773,10 @@ const ITEMS = [
   },
   {
     id: 'hoodie', name: 'Hoodie', price: 40,
-    short: 'Oversized heavyweight hoodie',
+    short: 'A warm hoodie in rich brown — cozy and stylish at once.',
     bg: '#EDE8DF',
-    desc: 'Heavyweight oversized hoodie in warm sand tones. Embroidered Alconost logo on the chest.',
-    tags: ['Unisex', 'Oversized', 'Cotton'],
+    desc: 'A warm hoodie in rich brown — cozy and stylish at once. Fleece-lined, with a hood and pockets. Comfortable and warm at the same time.',
+    tags: ['Fleece-lined', 'Rich brown', 'Pockets'],
     sizes: [
       { label: 'Male XL', qty: 1 }
     ]
@@ -795,18 +799,18 @@ const ITEMS = [
   },
   {
     id: 'sweatshirt', name: 'Sweatshirt', price: 35,
-    short: 'Heavyweight crewneck sweatshirt',
+    short: 'A cozy grey-blue sweatshirt. Soft fleece, relaxed fit.',
     bg: '#EAE5DC',
-    desc: 'Heavyweight cotton-blend crewneck in warm stone. Ribbed cuffs and hem, embroidered ALCONOST wordmark on the chest.',
-    tags: ['Cotton blend', 'Embroidered', 'Unisex'],
+    desc: 'A cozy grey-blue sweatshirt. Soft fleece, relaxed fit.',
+    tags: ['Soft fleece', 'Grey-blue', 'Relaxed fit'],
     sizes: []
   },
   {
     id: 'backpack', name: 'Backpack', price: 45,
-    short: 'City backpack with owl detail',
+    short: 'A city backpack in faux leather — spacious and roomy.',
     bg: '#E5E2DC',
-    desc: 'Compact city backpack in matte black. Padded laptop sleeve, front zip pocket with embossed owl badge. Holds 20L.',
-    tags: ['20L', 'Padded sleeve', 'Water-resistant'],
+    desc: 'A city backpack in faux leather — spacious and roomy. For the always-on-the-move type. Size: 43×31×13 cm.',
+    tags: ['Faux leather', '43×31×13 cm', 'City style'],
     sizes: []
   },
   {
@@ -815,6 +819,22 @@ const ITEMS = [
     bg: '#F0EBE4',
     desc: 'Stretchy spandex luggage cover with the Alconost owl print. Protects your suitcase and makes it unmistakable on the belt.',
     tags: ['Spandex', 'Printed', 'Universal fit'],
+    sizes: []
+  },
+  {
+    id: 'tshirt_black', name: 'T-shirt Black', price: 20,
+    short: 'A timeless black tee — the foundation of any wardrobe.',
+    bg: '#2E2A25',
+    desc: 'A timeless black tee — the foundation of any wardrobe. Soft cotton, a clean print, and that quiet sense of belonging. Straight fit.',
+    tags: ['Soft cotton', 'Straight fit', 'Black'],
+    sizes: []
+  },
+  {
+    id: 'socks', name: 'Socks', price: 10,
+    short: 'White, comfortable, high-cut socks for every day.',
+    bg: '#F4F0E8',
+    desc: 'White, comfortable, high-cut socks. Cotton.',
+    tags: ['Cotton', 'High-cut', 'White'],
     sizes: []
   }
 ];
