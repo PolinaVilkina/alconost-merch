@@ -21,25 +21,26 @@ jobs:
           with urllib.request.urlopen(url) as r:
               text = r.read().decode('utf-8')
 
-          NAME_MAP = {
-              'laptop case':   'laptop_case',
-              't-shirt':       'tshirt',
-              'sweatshirt':    'sweatshirt',
-              'backpack':      'backpack',
-              'hoodie':        'hoodie',
-              'luggage cover': 'luggage_cover',
-              'thetmos mug':   'bottle',
-              'thermos mug':   'bottle',
-              'thermos':       'bottle',
-              'rain poncho':   'rain_poncho',
-              'windbreaker':   'rain_poncho',
+          # Items that can appear multiple times get disambiguated by occurrence order
+          NAME_MAP_ORDERED = {
+              'laptop case':   ['laptop_case'],
+              't-shirt':       ['tshirt', 'tshirt_black'],
+              'sweatshirt':    ['sweatshirt'],
+              'backpack':      ['backpack'],
+              'hoodie':        ['hoodie'],
+              'luggage cover': ['luggage_cover'],
+              'thetmos mug':   ['bottle'],
+              'thermos mug':   ['bottle'],
+              'thermos':       ['bottle'],
+              'rain poncho':   ['rain_poncho'],
+              'windbreaker':   ['rain_poncho'],
+              'socks':         ['socks'],
           }
+          name_occurrence = {}
 
           def normalize_label(s):
               s = s.strip()
-              # comma decimal separator → period (e.g. "15,6"" → "15.6"")
               s = re.sub(r'(\d),(\d)', r'\1.\2', s)
-              # capitalize first letter of each word
               return ' '.join(w[0].upper() + w[1:] if w else w for w in s.split())
 
           stock = {}
@@ -55,11 +56,13 @@ jobs:
               qty_raw  = row[2].strip()
 
               if name_raw:
-                  key = NAME_MAP.get(name_raw.lower())
-                  if key:
-                      current_key = key
-                      if key not in stock:
-                          stock[key] = []
+                  name_lower = name_raw.lower()
+                  variants = NAME_MAP_ORDERED.get(name_lower)
+                  if variants:
+                      occ = name_occurrence.get(name_lower, 0)
+                      current_key = variants[min(occ, len(variants) - 1)]
+                      name_occurrence[name_lower] = occ + 1
+                      stock.setdefault(current_key, [])
 
               if current_key is None:
                   continue
@@ -71,16 +74,16 @@ jobs:
 
               if size_raw:
                   stock[current_key].append({'label': normalize_label(size_raw), 'qty': qty})
-              elif qty == 0:
-                  pass  # no-size item with 0 stock — keep array empty
 
-          # ensure all known items exist even if missing from sheet
-          for key in NAME_MAP.values():
-              stock.setdefault(key, [])
+          # ensure all known items present
+          for variants in NAME_MAP_ORDERED.values():
+              for key in variants:
+                  stock.setdefault(key, [])
 
           with open('stock.json', 'w') as f:
               json.dump(stock, f, indent=2)
-          print(f"Wrote stock.json with {sum(len(v) for v in stock.values())} size entries across {len(stock)} items")
+          total = sum(len(v) for v in stock.values())
+          print(f"Wrote stock.json: {len(stock)} items, {total} size entries")
           EOF
 
       - name: Commit if changed
