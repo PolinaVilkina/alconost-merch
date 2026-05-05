@@ -9,7 +9,9 @@
     {"label": "Female S", "qty": 3},
     {"label": "Female XS", "qty": 1},
     {"label": "Male L", "qty": 2},
-    {"label": "Male XL", "qty": 1},
+    {"label": "Male XL", "qty": 1}
+  ],
+  "tshirt_black": [
     {"label": "Male (one size)", "qty": 2}
   ],
   "sweatshirt": [
@@ -23,5 +25,6 @@
   ],
   "luggage_cover": [],
   "bottle": [],
-  "rain_poncho": []
+  "rain_poncho": [],
+  "socks": []
 }
