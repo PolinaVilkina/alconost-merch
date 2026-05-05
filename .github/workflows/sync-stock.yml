@@ -1,0 +1,92 @@
+name: Sync merch stock from Google Sheets
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and parse sheet
+        run: |
+          python3 - << 'EOF'
+          import csv, json, re, urllib.request
+
+          SHEET_ID = '1Vh913Z3nTDQJhWt-CqgpoKnLyv-rd_e2UEFRg4DvCtk'
+          url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv'
+          with urllib.request.urlopen(url) as r:
+              text = r.read().decode('utf-8')
+
+          NAME_MAP = {
+              'laptop case':   'laptop_case',
+              't-shirt':       'tshirt',
+              'sweatshirt':    'sweatshirt',
+              'backpack':      'backpack',
+              'hoodie':        'hoodie',
+              'luggage cover': 'luggage_cover',
+              'thetmos mug':   'bottle',
+              'thermos mug':   'bottle',
+              'thermos':       'bottle',
+              'rain poncho':   'rain_poncho',
+              'windbreaker':   'rain_poncho',
+          }
+
+          def normalize_label(s):
+              s = s.strip()
+              # comma decimal separator → period (e.g. "15,6"" → "15.6"")
+              s = re.sub(r'(\d),(\d)', r'\1.\2', s)
+              # capitalize first letter of each word
+              return ' '.join(w[0].upper() + w[1:] if w else w for w in s.split())
+
+          stock = {}
+          current_key = None
+          reader = csv.reader(text.splitlines())
+          next(reader)  # skip header
+
+          for row in reader:
+              if len(row) < 3:
+                  continue
+              name_raw = row[0].strip()
+              size_raw = row[1].strip()
+              qty_raw  = row[2].strip()
+
+              if name_raw:
+                  key = NAME_MAP.get(name_raw.lower())
+                  if key:
+                      current_key = key
+                      if key not in stock:
+                          stock[key] = []
+
+              if current_key is None:
+                  continue
+
+              try:
+                  qty = int(qty_raw)
+              except ValueError:
+                  qty = 0
+
+              if size_raw:
+                  stock[current_key].append({'label': normalize_label(size_raw), 'qty': qty})
+              elif qty == 0:
+                  pass  # no-size item with 0 stock — keep array empty
+
+          # ensure all known items exist even if missing from sheet
+          for key in NAME_MAP.values():
+              stock.setdefault(key, [])
+
+          with open('stock.json', 'w') as f:
+              json.dump(stock, f, indent=2)
+          print(f"Wrote stock.json with {sum(len(v) for v in stock.values())} size entries across {len(stock)} items")
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stock.json
+          git diff --cached --quiet || git commit -m "chore: sync merch stock from Google Sheets"
+          git push
