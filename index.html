@@ -1124,6 +1124,16 @@ function placeOrder() {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'payload=' + encodeURIComponent(JSON.stringify({ text: slackText })),
   });
+
+  const SHEET_ITEMS = ['laptop_case','tshirt','tshirt_black','sweatshirt','backpack','hoodie','luggage_cover'];
+  if (SHEET_ITEMS.includes(selectedItem.id)) {
+    fetch('https://script.google.com/macros/s/AKfycbyHk6zwQ9yN6OJkrRK6eHtM3PtLfu8D2paMwdt7tw2hCsexI1T62DSjetGdsK9MhE1E/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itemId: selectedItem.id, size: orderedSize || '' }),
+    });
+  }
 }
 
 async function loadStock() {
