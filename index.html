@@ -1109,12 +1109,13 @@ function placeOrder() {
   renderGrid();
   document.getElementById('btnOrder').disabled = totalQty(selectedItem) === 0;
 
-  const slackText = [
+  const slackLines = [
     `🛍 *New merch order*`,
-    `*Item:* ${selectedItem.name}${selectedSize ? ' — *Size:* ' + selectedSize : ''}`,
-    `*Employee:* ${uid}`,
-    `*Cost:* ${selectedItem.price} diamonds`,
-  ].join('\n');
+    `*Item:* ${selectedItem.name}`,
+  ];
+  if (selectedSize) slackLines.push(`*Size:* ${selectedSize}`);
+  slackLines.push(`*Employee:* ${uid}`, `*Cost:* ${selectedItem.price} diamonds`);
+  const slackText = slackLines.join('\n');
   const _swh = ['https://hooks.slack.com','services','T04BFBC6V','B0B2ANY438R','gWz8ASFI4HzFb7Zr2mVSLkvs'].join('/');
   fetch(_swh, {
     method: 'POST',
