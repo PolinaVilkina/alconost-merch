@@ -957,7 +957,12 @@ function stockBadge(qty) {
 }
 
 function renderGrid() {
-  document.getElementById('productGrid').innerHTML = ITEMS.map(item => {
+  const sorted = [...ITEMS].sort((a, b) => {
+    const aOos = totalQty(a) === 0 ? 1 : 0;
+    const bOos = totalQty(b) === 0 ? 1 : 0;
+    return aOos - bOos;
+  });
+  document.getElementById('productGrid').innerHTML = sorted.map(item => {
     const qty = totalQty(item);
     const oos = qty === 0;
     return `<div class="product-card${selectedItem && selectedItem.id === item.id ? ' active' : ''}${oos ? ' out-of-stock' : ''}"
@@ -972,10 +977,7 @@ function renderGrid() {
         <div class="card-name">${item.name}</div>
         <div class="card-desc">${item.short}</div>
         <div class="card-footer">
-          <div class="price-badge">
-            💎
-            ${item.price} <small>dmnd</small>
-          </div>
+          ${oos ? '' : `<div class="price-badge">💎 ${item.price} <small>dmnd</small></div>`}
           <div class="card-arrow">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="#9A9187" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
