@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Body -->
+  <ellipse cx="16" cy="19" rx="11" ry="10" fill="#C4A96E"/>
+  <!-- Ear tufts -->
+  <polygon points="9,10 12,16 7,15" fill="#B89A5C"/>
+  <polygon points="23,10 20,16 25,15" fill="#B89A5C"/>
+  <!-- Face disc -->
+  <ellipse cx="16" cy="19" rx="8.5" ry="8" fill="#EDE0C4"/>
+  <!-- Left eye -->
+  <circle cx="12.5" cy="17.5" r="3.5" fill="#1E1A16"/>
+  <circle cx="11.4" cy="16.4" r="1.1" fill="white" opacity="0.9"/>
+  <!-- Right eye -->
+  <circle cx="19.5" cy="17.5" r="3.5" fill="#1E1A16"/>
+  <circle cx="18.4" cy="16.4" r="1.1" fill="white" opacity="0.9"/>
+  <!-- Beak -->
+  <polygon points="16,20 14.2,23 17.8,23" fill="#B89A5C"/>
+</svg>
