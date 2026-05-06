@@ -1108,6 +1108,20 @@ function placeOrder() {
   renderSizes(selectedItem);
   renderGrid();
   document.getElementById('btnOrder').disabled = totalQty(selectedItem) === 0;
+
+  const slackText = [
+    `🛍 *New merch order*`,
+    `*Item:* ${selectedItem.name}${selectedSize ? ' — *Size:* ' + selectedSize : ''}`,
+    `*Employee:* ${uid}`,
+    `*Cost:* ${selectedItem.price} diamonds`,
+  ].join('\n');
+  const _swh = ['https://hooks.slack.com','services','T04BFBC6V','B0B2ANY438R','gWz8ASFI4HzFb7Zr2mVSLkvs'].join('/');
+  fetch(_swh, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'payload=' + encodeURIComponent(JSON.stringify({ text: slackText })),
+  });
 }
 
 async function loadStock() {
