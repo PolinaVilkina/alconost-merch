@@ -1104,6 +1104,7 @@ function placeOrder() {
     Remaining balance: <strong>${balance}</strong> diamonds. HR will reach out shortly.`;
   succ.classList.add('show');
 
+  const orderedSize = selectedSize;
   renderStockLine(selectedItem);
   renderSizes(selectedItem);
   renderGrid();
@@ -1113,7 +1114,7 @@ function placeOrder() {
     `🛍 *New merch order*`,
     `*Item:* ${selectedItem.name}`,
   ];
-  if (selectedSize) slackLines.push(`*Size:* ${selectedSize}`);
+  if (orderedSize) slackLines.push(`*Size:* ${orderedSize}`);
   slackLines.push(`*Employee:* ${uid}`, `*Cost:* ${selectedItem.price} diamonds`);
   const slackText = slackLines.join('\n');
   const _swh = ['https://hooks.slack.com','services','T04BFBC6V','B0B2ANY438R','gWz8ASFI4HzFb7Zr2mVSLkvs'].join('/');
