@@ -1130,7 +1130,7 @@ function placeOrder() {
     fetch('https://script.google.com/macros/s/AKfycbyHk6zwQ9yN6OJkrRK6eHtM3PtLfu8D2paMwdt7tw2hCsexI1T62DSjetGdsK9MhE1E/exec', {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ itemId: selectedItem.id, size: orderedSize || '' }),
     });
   }
