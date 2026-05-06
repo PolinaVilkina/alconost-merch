@@ -1129,12 +1129,10 @@ function placeOrder() {
 
   const SHEET_ITEMS = ['laptop_case','tshirt','tshirt_black','sweatshirt','backpack','hoodie','luggage_cover','test_tshirt'];
   if (SHEET_ITEMS.includes(selectedItem.id)) {
-    fetch('https://script.google.com/macros/s/AKfycbyHk6zwQ9yN6OJkrRK6eHtM3PtLfu8D2paMwdt7tw2hCsexI1T62DSjetGdsK9MhE1E/exec', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ itemId: selectedItem.id, size: orderedSize || '' }),
-    });
+    const _su = new URL('https://script.google.com/macros/s/AKfycbwJtGpYHFLUpBukoIgMbGGVhr09kI_cg-0gZxiGzJuVL-FPk6-pYbQu3VK4aIsV1QhH/exec');
+    _su.searchParams.set('itemId', selectedItem.id);
+    _su.searchParams.set('size', orderedSize || '');
+    fetch(_su.toString(), { mode: 'no-cors' });
   }
 }
 
