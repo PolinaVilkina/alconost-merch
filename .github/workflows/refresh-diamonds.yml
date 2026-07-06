@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
+    inputs:
+      userId:
+        description: 'Employee user ID (leave empty to only refresh)'
+        required: false
+        type: string
+      spend:
+        description: 'Diamonds to subtract (leave empty to only refresh)'
+        required: false
+        type: string
 
 jobs:
   refresh:
@@ -11,7 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch diamonds from MCP
+      - name: Init MCP session
+        id: mcp_init
         run: |
           SESSION_ID=$(cat /proc/sys/kernel/random/uuid)
           SERVER_SESSION=$(curl -si -X POST "https://services.app.alconost.com/mcp" \
@@ -19,13 +29,26 @@ jobs:
             -H "X-API-Key: ak_pv_pvkey_a7f94254_c841_4d18_bfd4_3905fa07fa10" \
             -H "Mcp-Session-Id: $SESSION_ID" \
             -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"gh-action","version":"1.0"}}}' \
-            | grep -i "mcp-session-id:" | tail -1 | awk '{print $2}' | tr -d '')
+            | grep -i "mcp-session-id:" | tail -1 | awk '{print $2}' | tr -d $'\r')
+          echo "session=$SERVER_SESSION" >> $GITHUB_OUTPUT
 
+      - name: Subtract diamonds on order
+        if: ${{ github.event.inputs.userId != '' && github.event.inputs.spend != '' }}
+        run: |
           curl -s -X POST "https://services.app.alconost.com/mcp" \
             -H "Content-Type: application/json" \
             -H "X-API-Key: ak_pv_pvkey_a7f94254_c841_4d18_bfd4_3905fa07fa10" \
-            -H "Mcp-Session-Id: $SERVER_SESSION" \
-            -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_diamonds","arguments":{}}}' \
+            -H "Mcp-Session-Id: ${{ steps.mcp_init.outputs.session }}" \
+            -d "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"subtract_diamonds\",\"arguments\":{\"userId\":\"${{ github.event.inputs.userId }}\",\"spend\":${{ github.event.inputs.spend }}}}}"
+          echo "Subtracted ${{ github.event.inputs.spend }} diamonds from ${{ github.event.inputs.userId }}"
+
+      - name: Fetch diamonds from MCP
+        run: |
+          curl -s -X POST "https://services.app.alconost.com/mcp" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ak_pv_pvkey_a7f94254_c841_4d18_bfd4_3905fa07fa10" \
+            -H "Mcp-Session-Id: ${{ steps.mcp_init.outputs.session }}" \
+            -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_diamonds","arguments":{}}}' \
             | jq -r '.result.content[0].text' > diamonds.json
 
           echo "Fetched $(jq length diamonds.json) records"
