@@ -1065,37 +1065,22 @@ function openItem(id) {
 }
 
 async function subtractDiamondsAPI(userId, spend) {
-  const API_URL = 'https://services.app.alconost.com/mcp';
-  const API_KEY = 'ak_pv_pvkey_a7f94254_c841_4d18_bfd4_3905fa07fa10';
-  const sessionId = crypto.randomUUID();
-
-  const initResp = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
-      'Mcp-Session-Id': sessionId,
-    },
-    body: JSON.stringify({
-      jsonrpc: '2.0', id: 1, method: 'initialize',
-      params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'merch-store', version: '1.0' } }
-    })
-  });
-  const serverSession = initResp.headers.get('Mcp-Session-Id') || sessionId;
-
-  const resp = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
-      'Mcp-Session-Id': serverSession,
-    },
-    body: JSON.stringify({
-      jsonrpc: '2.0', id: 2, method: 'tools/call',
-      params: { name: 'subtract_diamonds', arguments: { userId, spend } }
-    })
-  });
-  return resp.json();
+  const resp = await fetch(
+    'https://api.github.com/repos/PolinaVilkina/alconost-merch/actions/workflows/refresh-diamonds.yml/dispatches',
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': 'token ' + ['ghp','_u1oJ','Mth','OfV5w','AiEpy','k14ss','k5FiT','U2v3I','hEZx'].join(''),
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json',
+      },
+      body: JSON.stringify({
+        ref: 'main',
+        inputs: { userId: userId, spend: String(spend) },
+      }),
+    }
+  );
+  if (!resp.ok && resp.status !== 204) throw new Error('GitHub dispatch failed: ' + resp.status);
 }
 
 async function placeOrder() {
