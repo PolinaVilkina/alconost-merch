@@ -18,13 +18,8 @@
   "total": 2
 },{
   "userId": "ana",
-  "received": 2,
-  "total": 2
-},{
-  "userId": "anastasiya",
-  "received": 18,
-  "spent": 13,
-  "total": 5
+  "received": 3,
+  "total": 3
 },{
   "userId": "anb",
   "received": 1,
@@ -65,21 +60,22 @@
   "spent": 5
 },{
   "userId": "er",
-  "received": 23,
-  "spent": 23
+  "received": 24,
+  "spent": 23,
+  "total": 1
 },{
   "userId": "et",
-  "received": 19,
+  "received": 21,
   "spent": 4,
-  "total": 15
+  "total": 17
 },{
   "userId": "frida",
   "received": 2,
   "total": 2
 },{
   "userId": "grace",
-  "received": 7,
-  "total": 7
+  "received": 9,
+  "total": 9
 },{
   "userId": "ik",
   "received": 20,
@@ -94,9 +90,9 @@
   "spent": 21
 },{
   "userId": "kseniya",
-  "received": 32,
+  "received": 38,
   "spent": 19,
-  "total": 13
+  "total": 19
 },{
   "userId": "ksu",
   "received": 40,
@@ -107,18 +103,23 @@
   "total": 5
 },{
   "userId": "margarita",
-  "received": 21,
-  "spent": 21
+  "received": 22,
+  "spent": 21,
+  "total": 1
 },{
   "userId": "mp",
-  "received": 9,
+  "received": 10,
   "spent": 8,
+  "total": 2
+},{
+  "userId": "nadya",
+  "received": 1,
   "total": 1
 },{
   "userId": "nb",
-  "received": 27,
+  "received": 32,
   "spent": 20,
-  "total": 7
+  "total": 12
 },{
   "userId": "nick",
   "received": 7,
@@ -133,12 +134,13 @@
   "total": 2
 },{
   "userId": "nt",
-  "received": 7,
-  "total": 7
+  "received": 8,
+  "total": 8
 },{
   "userId": "oleg",
-  "received": 22,
-  "spent": 22
+  "received": 28,
+  "spent": 22,
+  "total": 6
 },{
   "userId": "om",
   "received": 35,
@@ -151,16 +153,16 @@
 },{
   "userId": "pv",
   "received": 9,
-  "spent": 9
+  "total": 9
 },{
   "userId": "sdn",
   "received": 2,
   "total": 2
 },{
   "userId": "shu",
-  "received": 18,
+  "received": 19,
   "spent": 17,
-  "total": 1
+  "total": 2
 },{
   "userId": "ss",
   "received": 1,
