@@ -360,11 +360,35 @@ const S = {
   toastTimer:null
 };
 
+// ── Employee name map (from staff directory) ───────────────
+const NAMES = {
+  aiko:'Aiko Hayashi',ak:'Alex',al:'Tom',albina:'Albina',alconostautotest:'Alconost Test',
+  alher:'Alyssa Hernandez',alinam:'Alina Maliga',alsk:'Alexander Skazchenko',am:'Alexander',
+  andrei:'Andrei',anhall:'Annabelle Hall',autotestalcadm:'Alconost Temptest',brymo:'Bryson Morgan',
+  cama:'Case Martin',daria:'Daria Goroshko',dasha:'Darya Zharskaya',ddulich:'Dmitriy Dulich',
+  debu:'Delia Butler',diana:'Diana',div:'Diana Ivanenko',dv:'Dmitry Vinitski',
+  emmca:'Emmanuel Carter',fidi:'Fiona Diaz',gialex:'Giancarlo Alexander',grace:'Grace',
+  hannak:'Hanna',igor:'Igor Golovin',ilya:'Ilya U',irinam:'Irina Moiseichik',
+  iris:'Irina Sumtsova',is:'Ilya Spiridonov',iwa:'Ignacio Washington',jamill:'Jane Miller',
+  jazzteam:'Kolya P',jolenewright:'Jolene Wright',kd:'Kateryna Derevianko',
+  kkr:'Kseniya Krasovskaya',lenabar:'Elena Baryshnikova',map:'Maryia',my_a:'Mikhail',
+  nadya:'Nadya Verenich',nastya:'Nastya Khval',nikre:'Nikolas Reed',nilebryant:'Nile Bryant',
+  oleg:'Oleg Tihonov',olga:'Olga Orlova',pvtest:'Polina Test',quca:'Queen Calanthe',
+  romantest:'Roman',sanghun:'Sanghun Lee',sashatest:'Sasha',stan:'Stas Kharevich',
+  susco:'Sutton Scott',tonyzal:'Antanina Zaleschenok',ucol:'Urbana Coleman',
+  valery:'Valery Sivou',vecam:'Veronika Campbell',vjohnson:'Victor Johnson',
+  vk:'Vladimir Kupratsevich',vladb:'Vlad',xjam:'Xever James',yoc:'Yo Collins',
+  zagr:'Zahra Gray',zre:'Zain Reed',
+};
+
 // ── Helpers ────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const h = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 function qty(item){ return item.sizes.length ? item.sizes.reduce((s,z)=>s+z.qty,0) : 0; }
-function initials(id){ return id ? id.slice(0,2).toUpperCase() : '—'; }
+function initials(name){
+  const p = name.trim().split(/\s+/);
+  return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
+}
 const diamond = '<svg width="11" height="11" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1" transform="rotate(45 6 6)" fill="#007AFF"/></svg>';
 
 // ── Data loading ───────────────────────────────────────────
@@ -385,7 +409,7 @@ async function init(){
   try{
     const list = await loadDiamonds();
     S.employees = list.map(d=>({
-      id:d.userId, code:d.userId, name:d.userId,
+      id:d.userId, name:NAMES[d.userId]||d.userId,
       balance: d.total!==undefined ? d.total : (d.received-(d.spent||0))
     }));
   }catch(e){ console.warn('diamonds.json unavailable',e); }
@@ -396,28 +420,21 @@ async function init(){
 function togglePicker(){
   S.pickerOpen = !S.pickerOpen;
   $('pickerWrap').classList.toggle('open',S.pickerOpen);
-  if(S.pickerOpen){ renderPickerList(''); setTimeout(()=>$('pickerSearch').focus(),40); }
-  else { $('pickerSearch').value=''; S.query=''; }
+  if(S.pickerOpen) renderPickerList();
 }
 function openPicker(){
-  S.pickerOpen=true; S.query='';
+  S.pickerOpen=true;
   $('pickerWrap').classList.add('open');
-  renderPickerList('');
-  setTimeout(()=>$('pickerSearch').focus(),40);
+  renderPickerList();
 }
-function onPickerSearch(v){ S.query=v; renderPickerList(v); }
 
-function renderPickerList(q){
-  const ql = q.trim().toLowerCase();
-  const filtered = S.employees.filter(p=>
-    !ql || p.id.toLowerCase().includes(ql)
-  );
+function renderPickerList(){
   const list = $('pickerList');
-  list.innerHTML = filtered.length===0
-    ? `<div class="picker-empty">No one matches. Try a different ID.</div>`
-    : filtered.map(p=>`
+  list.innerHTML = S.employees.length===0
+    ? `<div class="picker-empty">No employees found.</div>`
+    : S.employees.map(p=>`
         <button class="picker-row" data-uid="${h(p.id)}">
-          <span class="p-code">${h(p.code)}</span>
+          <span class="p-code">${h(p.id)}</span>
           <span class="p-name">${h(p.name)}</span>
           <span class="p-bal">${p.balance}</span>
         </button>`).join('');
@@ -429,14 +446,14 @@ $('pickerList').addEventListener('click',e=>{
   if(!btn) return;
   const p = S.employees.find(e=>e.id===btn.dataset.uid);
   if(!p) return;
-  S.user={...p}; S.pickerOpen=false; S.query=''; S.placed=null;
-  $('pickerWrap').classList.remove('open'); $('pickerSearch').value='';
+  S.user={...p}; S.pickerOpen=false; S.placed=null;
+  $('pickerWrap').classList.remove('open');
   render();
 });
 
 function clearUser(){
-  S.user=null; S.pickerOpen=false; S.query=''; S.filter='Everything'; S.placed=null;
-  $('pickerWrap').classList.remove('open'); $('pickerSearch').value='';
+  S.user=null; S.pickerOpen=false; S.filter='Everything'; S.placed=null;
+  $('pickerWrap').classList.remove('open');
   render();
 }
 
@@ -446,8 +463,8 @@ function render(){
   const bal = si ? S.user.balance : 0;
 
   // Header
-  $('pickerAvatar').textContent = si ? initials(S.user.id) : '—';
-  $('pickerSub').textContent    = si ? S.user.code : 'Ordering as';
+  $('pickerAvatar').textContent = si ? initials(S.user.name) : '—';
+  $('pickerSub').textContent    = si ? S.user.id : 'Ordering as';
   $('pickerVal').textContent    = si ? S.user.name : 'Pick your name';
   $('balBadge').classList.toggle('hidden',!si);
   $('balNum').textContent = bal;
