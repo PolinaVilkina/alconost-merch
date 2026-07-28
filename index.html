@@ -218,7 +218,7 @@ input:focus { outline: none; }
       </div>
 
       <div class="bal-badge hidden" id="balBadge">
-        <svg width="13" height="13" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1" transform="rotate(45 6 6)" fill="#007AFF"/></svg>
+        💎
         <span class="bal-num" id="balNum">0</span>
         <span class="bal-lbl">diamonds</span>
       </div>
@@ -273,7 +273,7 @@ input:focus { outline: none; }
       <div class="panel-hd">
         <h2 class="panel-title" id="panelTitle"></h2>
         <span class="price-pill">
-          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1" transform="rotate(45 6 6)" fill="#007AFF"/></svg>
+          💎
           <span id="panelPrice"></span>
         </span>
       </div>
@@ -394,7 +394,7 @@ function initials(name){
   const p = name.trim().split(/\s+/);
   return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
 }
-const diamond = '<svg width="11" height="11" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1" transform="rotate(45 6 6)" fill="#007AFF"/></svg>';
+const diamond = '💎';
 
 // ── Data loading ───────────────────────────────────────────
 let diamondsCache = null;
