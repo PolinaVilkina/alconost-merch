@@ -106,8 +106,6 @@ input:focus { outline: none; }
 .f-btn.off { background: transparent; border-color: #E0E0E0; color: #666; font-weight: 500; }
 .f-btn.off:hover { border-color: #B6CDFF; background: #E8F0FF; color: #007AFF; }
 
-.signin-banner { display: flex; align-items: center; gap: 16px; background: #fff; border: 1px solid #B6CDFF; border-radius: 8px; padding: 16px 20px; margin-bottom: 26px; }
-.signin-banner p { margin: 0; flex: 1; font-size: 14px; line-height: 1.5; }
 
 /* Product grid */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(236px, 1fr)); gap: 20px; }
@@ -242,9 +240,6 @@ input:focus { outline: none; }
       <div class="filters" id="filtersRow"></div>
     </div>
 
-    <div class="signin-banner" id="signinBanner">
-      <p>Browse freely. Pick your name up top — with your ID if there are two of you — and we'll show your balance and deduct diamonds on order.</p>
-    </div>
 
     <div class="product-grid" id="productGrid"></div>
 
@@ -464,8 +459,6 @@ function render(){
     ? `${avail} items in stock · ${afford} within your ${bal} diamonds`
     : `${avail} of ${S.items.length} items in stock. Pick your name to see what your balance covers.`;
 
-  // Sign-in banner
-  $('signinBanner').classList.toggle('hidden',si);
 
   // Filters
   const chips = si ? ['Everything','In stock','Within my balance'] : ['Everything','In stock'];
