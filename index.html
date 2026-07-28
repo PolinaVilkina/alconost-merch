@@ -432,12 +432,14 @@ function renderPickerList(){
   const list = $('pickerList');
   list.innerHTML = S.employees.length===0
     ? `<div class="picker-empty">No employees found.</div>`
-    : S.employees.map(p=>`
-        <button class="picker-row" data-uid="${h(p.id)}">
+    : S.employees.map(p=>{
+        const hasName = p.name !== p.id;
+        return `<button class="picker-row" data-uid="${h(p.id)}">
           <span class="p-code">${h(p.id)}</span>
-          <span class="p-name">${h(p.name)}</span>
+          <span class="p-name">${hasName ? h(p.name) : ''}</span>
           <span class="p-bal">${p.balance}</span>
-        </button>`).join('');
+        </button>`;
+      }).join('');
   $('pickerFoot').classList.toggle('hidden',!S.user);
 }
 
@@ -463,8 +465,9 @@ function render(){
   const bal = si ? S.user.balance : 0;
 
   // Header
+  const hasName = si && S.user.name !== S.user.id;
   $('pickerAvatar').textContent = si ? initials(S.user.name) : '—';
-  $('pickerSub').textContent    = si ? S.user.id : 'Ordering as';
+  $('pickerSub').textContent    = hasName ? S.user.id : 'Ordering as';
   $('pickerVal').textContent    = si ? S.user.name : 'Pick your name';
   $('balBadge').classList.toggle('hidden',!si);
   $('balNum').textContent = bal;
