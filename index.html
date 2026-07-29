@@ -712,12 +712,14 @@ async function placeOrder(){
   const raw=S.items.find(i=>i.id===S.openId);
   if(!raw||!S.user) return;
   const btn=$('btnOrder'); btn.disabled=true;
-  try{ await subtractDiamondsAPI(S.user.id,raw.price); }
-  catch(e){
-    console.error('Diamond subtraction failed:',e);
-    btn.disabled=false;
-    showToast('Could not reach the diamonds service. Please try again.');
-    return;
+  if(raw.price > 0){
+    try{ await subtractDiamondsAPI(S.user.id, raw.price); }
+    catch(e){
+      console.error('Diamond subtraction failed:',e);
+      btn.disabled=false;
+      showToast('Could not reach the diamonds service. Please try again.');
+      return;
+    }
   }
   // Local updates
   if(S.size){ const sz=raw.sizes.find(z=>z.label===S.size); if(sz) sz.qty=Math.max(0,sz.qty-1); }
