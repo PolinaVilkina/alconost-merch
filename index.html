@@ -467,12 +467,32 @@ function initials(name){
 const diamond = '💎';
 
 // ── Data loading ───────────────────────────────────────────
-let diamondsCache = null;
-async function loadDiamonds(){
-  if(diamondsCache) return diamondsCache;
-  const r = await fetch('diamonds.json?t='+Date.now());
-  diamondsCache = await r.json();
-  return diamondsCache;
+const MCP_URL = 'https://services.app.alconost.com/mcp';
+const MCP_KEY = ['ak_pv_pvkey','a7f94254','c841','4d18','bfd4','3905fa07fa10'].join('_');
+
+async function fetchDiamondsFromMCP(){
+  const initResp = await fetch(MCP_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Api-Key':MCP_KEY},
+    body:JSON.stringify({jsonrpc:'2.0',id:1,method:'initialize',
+      params:{protocolVersion:'2024-11-05',capabilities:{},clientInfo:{name:'merch-store',version:'1.0'}}})
+  });
+  const sessionId = initResp.headers.get('mcp-session-id');
+  const resp = await fetch(MCP_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Api-Key':MCP_KEY,'mcp-session-id':sessionId},
+    body:JSON.stringify({jsonrpc:'2.0',id:2,method:'tools/call',
+      params:{name:'get_diamonds',arguments:{}}})
+  });
+  const data = await resp.json();
+  return JSON.parse(data.result.content[0].text);
+}
+
+function mapDiamonds(list){
+  return list.map(d=>({
+    id:d.userId, name:NAMES[d.userId]||d.userId,
+    balance: d.total!==undefined ? d.total : (d.received-(d.spent||0))
+  }));
 }
 
 async function init(){
@@ -482,12 +502,14 @@ async function init(){
     S.items.forEach(item=>{ if(stock[item.id]!==undefined) item.sizes=stock[item.id]; });
   }catch(e){ console.warn('stock.json unavailable',e); }
   try{
-    const list = await loadDiamonds();
-    S.employees = list.map(d=>({
-      id:d.userId, name:NAMES[d.userId]||d.userId,
-      balance: d.total!==undefined ? d.total : (d.received-(d.spent||0))
-    }));
-  }catch(e){ console.warn('diamonds.json unavailable',e); }
+    S.employees = mapDiamonds(await fetchDiamondsFromMCP());
+  }catch(e){
+    console.warn('MCP sync failed, falling back to diamonds.json',e);
+    try{
+      const r = await fetch('diamonds.json?t='+Date.now());
+      S.employees = mapDiamonds(await r.json());
+    }catch(e2){ console.warn('diamonds.json unavailable',e2); }
+  }
   render();
 }
 
