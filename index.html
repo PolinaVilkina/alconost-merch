@@ -673,6 +673,7 @@ function renderPanel(){
   else $('balLine').classList.add('hidden');
 
   // Buttons
+  $('btnOrder').disabled = false;
   $('btnOrder').classList.toggle('hidden',!ready);
   $('btnPickUser').classList.toggle('hidden',!needsUser);
   $('btnBlocked').classList.toggle('hidden',!blocked);
