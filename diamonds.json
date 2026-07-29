@@ -152,7 +152,8 @@
 },{
   "userId": "pv",
   "received": 9,
-  "total": 9
+  "spent": 1,
+  "total": 8
 },{
   "userId": "sdn",
   "received": 2,
