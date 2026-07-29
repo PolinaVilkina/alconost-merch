@@ -36,7 +36,7 @@ jobs:
           echo "session=$SERVER_SESSION" >> $GITHUB_OUTPUT
 
       - name: Subtract diamonds on order
-        if: ${{ github.event.inputs.userId != '' && github.event.inputs.spend != '' }}
+        if: ${{ github.event.inputs.userId != '' && github.event.inputs.spend != '' && github.event.inputs.spend != '0' }}
         run: |
           curl -s -X POST "https://services.app.alconost.com/mcp" \
             -H "Content-Type: application/json" \
