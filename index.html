@@ -83,6 +83,10 @@ input:focus { outline: none; }
 .p-bal  { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #007AFF; flex: none; }
 .picker-empty { padding: 14px 10px; font-size: 13px; color: #666; }
 .picker-foot { border-top: 1px solid #E0E0E0; padding: 6px; }
+.picker-search-row { display:flex; align-items:center; gap:6px; padding:8px 10px 6px; border-bottom:1px solid #E0E0E0; }
+.picker-search-row svg { flex-shrink:0; opacity:.6; }
+.picker-input { flex:1; border:none; outline:none; font:14px/1 'Noto Sans',sans-serif; color:#1F1F1F; background:transparent; }
+.picker-input::placeholder { color:#aaa; }
 .picker-clear { width: 100%; text-align: left; background: none; border: none; padding: 9px 10px; border-radius: 4px; font-size: 13px; color: #007AFF; cursor: pointer; transition: background .12s; }
 .picker-clear:hover { background: #E8F0FF; }
 
@@ -271,6 +275,10 @@ input:focus { outline: none; }
           </svg>
         </button>
         <div class="picker-drop" id="pickerDrop">
+          <div class="picker-search-row">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="#888" stroke-width="1.6"/><path d="M10.5 10.5 14 14" stroke="#888" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <input class="picker-input" id="pickerSearch" type="text" placeholder="Search by name or ID" oninput="onPickerSearch(this.value)" autocomplete="off">
+          </div>
           <div class="picker-list" id="pickerList"></div>
           <div class="picker-foot hidden" id="pickerFoot">
             <button class="picker-clear" onclick="clearUser()">Clear selection</button>
@@ -517,19 +525,26 @@ async function init(){
 function togglePicker(){
   S.pickerOpen = !S.pickerOpen;
   $('pickerWrap').classList.toggle('open',S.pickerOpen);
-  if(S.pickerOpen) renderPickerList();
+  if(S.pickerOpen){ $('pickerSearch').value=''; renderPickerList(); setTimeout(()=>$('pickerSearch').focus(),50); }
 }
 function openPicker(){
   S.pickerOpen=true;
   $('pickerWrap').classList.add('open');
+  $('pickerSearch').value='';
   renderPickerList();
+  setTimeout(()=>$('pickerSearch').focus(),50);
 }
+function onPickerSearch(q){ renderPickerList(q); }
 
-function renderPickerList(){
+function renderPickerList(q=''){
   const list = $('pickerList');
-  list.innerHTML = S.employees.length===0
-    ? `<div class="picker-empty">No employees found.</div>`
-    : S.employees.map(p=>{
+  const lq = q.trim().toLowerCase();
+  const src = lq
+    ? S.employees.filter(p=>p.id.toLowerCase().includes(lq)||p.name.toLowerCase().includes(lq))
+    : S.employees;
+  list.innerHTML = src.length===0
+    ? `<div class="picker-empty">${lq ? 'No match for "'+h(q)+'".' : 'No employees found.'}</div>`
+    : src.map(p=>{
         const hasName = p.name !== p.id;
         return `<button class="picker-row" data-uid="${h(p.id)}">
           <span class="p-code">${h(p.id)}</span>
@@ -547,12 +562,14 @@ $('pickerList').addEventListener('click',e=>{
   if(!p) return;
   S.user={...p}; S.pickerOpen=false; S.placed=null;
   $('pickerWrap').classList.remove('open');
+  $('pickerSearch').value='';
   render();
 });
 
 function clearUser(){
   S.user=null; S.pickerOpen=false; S.filter='Everything'; S.placed=null;
   $('pickerWrap').classList.remove('open');
+  $('pickerSearch').value='';
   render();
 }
 
