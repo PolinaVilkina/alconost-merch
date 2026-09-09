@@ -1,7 +1,8 @@
 [{
   "userId": "albina",
-  "received": 2,
-  "spent": 2
+  "received": 3,
+  "spent": 2,
+  "total": 1
 },{
   "userId": "alsk",
   "received": 10,
@@ -95,8 +96,8 @@
   "total": 9
 },{
   "userId": "kuzmin",
-  "received": 5,
-  "total": 5
+  "received": 6,
+  "total": 6
 },{
   "userId": "margarita",
   "received": 22,
